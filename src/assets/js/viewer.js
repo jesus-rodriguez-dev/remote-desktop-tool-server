@@ -110,3 +110,13 @@ let loader = (activate) => {
 };
 
 loader(true);
+
+// Select quality
+const qualitySelector = document.getElementById("quality-selector");
+qualitySelector.selectedIndex = 2;
+
+let quality = 'low';
+qualitySelector.addEventListener('change', (e) => {
+    quality = e.target.value;
+    socket.emit('change-quality', quality);
+});

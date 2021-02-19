@@ -121,6 +121,10 @@ io.on('connection', (socket) => {
     socket.on('stop-streaming', () => {
         io.emit('stop-stream');
     });
+
+    socket.on('change-quality', (quality) => {
+        io.emit('quality', quality);
+    });
 });
 
 // PEER SERVER (streaming)
