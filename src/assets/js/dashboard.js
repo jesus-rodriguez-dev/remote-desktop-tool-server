@@ -64,3 +64,15 @@ let loader = (activate) => {
 };
 
 loader(true);
+
+// Log out
+let logout = document.getElementById('logout');
+logout.addEventListener('click', () => {
+  fetch('/login', {
+    method: 'DELETE',
+    mode: 'same-origin'
+  })
+  .then(res => {
+    window.location.replace("/login");
+  });
+});

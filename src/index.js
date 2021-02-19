@@ -3,6 +3,8 @@ const { app } = require('electron');
 const express = require('express');
 const expressApp = express();
 const http = require('http').createServer(expressApp);
+const bodyParser = require('body-parser');
+const session = require('express-session');
 const io = require('socket.io')(http);
 const helmet = require('helmet');
 const { ExpressPeerServer } = require('peer');
@@ -20,6 +22,14 @@ expressApp.use(helmet({
     }
 }));
 
+// SETTINGS
+expressApp.use( bodyParser.json() );
+let sessionConfig = {
+    secret:['as65d165a46f5as1d9as8d46', '12345asda4s8384sd6asd'],
+    saveUnitialized: false,
+    resave: false
+};
+expressApp.use(session(sessionConfig));
 // STATIC FILES
 expressApp.use(express.static(__dirname + '/assets'));
 
@@ -27,10 +37,14 @@ expressApp.use(express.static(__dirname + '/assets'));
 expressApp.set('view engine', 'ejs');
 expressApp.set('views', __dirname + '/views')
 
+// MIDDLEWARES
+const authUser = require('./middlewares/auth');
+expressApp.use(authUser);
+
 // ROUTES
 const routes = require('./routes/index');
-const { execArgv } = require('process');
 expressApp.use(routes);
+
 
 // SOCKET
 //Array to save information about connected clients on socket server
